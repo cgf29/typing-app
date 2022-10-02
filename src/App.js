@@ -3,7 +3,7 @@ import React, { useEffect, useState } from 'react'
 import './style.css'
 
 function App() {
-  const [text, setText] = useState('the at there some my of be use her than and this an would first a have each make water to from which like been in or she him call is one do into who  had how time oil that by their has its it word if look now he but will two find was not up more long for what other write down on all about go day are were out see did')
+  const [text, setText] = useState('the at there some my of be use her than and this an would first a have each make water to from which like been in or she him call is one do into who had how time oil that by their has its it word if look now he but will two find was not up more long for what other write down on all about go day are were out see did')
   const [inputValue, setInputValue] = useState('')
   const [words, setWords] = useState([])
   const [currentWord, setCurrentWord] = useState(0)
@@ -75,6 +75,13 @@ function App() {
     }
   }
 
+  const onStartClick = () => {
+    setIsTimerStarted(true)
+    setCurrentWord(0)
+    setCorrectWords([])
+    setWrongWords([])
+  }
+
 
   return (
     <div className="App">
@@ -91,7 +98,7 @@ function App() {
         <input type="text" onChange={onInputChange} value={inputValue} onKeyPress={onSpacePress} />
         <div className="timer">{timer === 60 ? '1:00' : timer > 9 ? `0:${timer}` : `0:0${timer}`}</div>
         <div className="result">Result: {isTimerStarted ? 0 : totalQuantityOfWords}</div>
-        <button className="button" onClick={() => setIsTimerStarted(!isTimerStarted)}>Start</button>
+        <button className="button" onClick={onStartClick}>Start</button>
       </div>
       <footer className="footer">
         <span>version 0.1.0</span>
