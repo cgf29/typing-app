@@ -4,7 +4,7 @@ import React, { useEffect, useState } from 'react'
 import './style.css'
 
 function App() {
-  const [text, setText] = useState('the at there some my of be use her than and this an would first a have each make water to from which like been in or she him call is one do into who had how time oil that by their has its it word if look now he but will two find was not up more long for what other write down on all about go day are were out see did more long for what other write down on all about go day are were out see did all about go day are were out see did more long for what other write down on all about go day are were out see did')
+  const [text, setText] = useState('the at there some my of be use her than and this an would first a have each make water to from which like been in or she him call is one do into who had how time oil that by their has its it word if look now he but will two find was not up more long for what other write down on all about go day are were out see did')
   const [inputValue, setInputValue] = useState('')
   const [words, setWords] = useState([])
   const [currentWord, setCurrentWord] = useState(0)
@@ -17,11 +17,12 @@ function App() {
   const [wrongWords, setWrongWords] = useState([])
   const [correctWords, setCorrectWords] = useState([])
   const [lineTracker, setLineTracker] = useState(0)
+  const [lineEnds, setLineEnds] = useState([])
 
 
   // useEffect(() => {
   //   setWords(text.split(' '))
-  // }, [])
+  // }, [text])
 
   useEffect(() => {
     const interval = setInterval(() => {
@@ -78,24 +79,30 @@ function App() {
         setIsCurrentWordCorrect(false)
         setWrongWords(prev => [...prev, currentWord])
       }
+      // console.log(words.slice(lineTracker, currentWord).join(' ').length);
 
-      if (words.slice(lineTracker, currentWord).join(' ').length > 42 && words.slice(lineTracker, currentWord).join(' ').length < 47) {
-        setLineTracker(currentWord)
-        console.log(words.slice(lineTracker, currentWord).join(' ').length)
-        if (lineTracker > 30) {
-          setCorrectWords([])
-          setWrongWords([])
-          setCurrentWord(0)
-          setWords(words.slice(currentWord + 1, words.length))
-          console.log(words.slice(currentWord + 1, words.length))
-        }
-      }
+      // if (words.slice(lineTracker, currentWord).join(' ').length > 34 && words.slice(lineTracker, currentWord).join(' ').length < 48) {
+      //   setLineTracker(currentWord)
+      //   console.log(words.slice(lineTracker, currentWord).join(' ').length)
+      //   if (lineTracker > 30) {
+      //     setCorrectWords([])
+      //     setWrongWords([])
+      //     setCurrentWord(0)
+      //     setWords(words.slice(currentWord + 1, words.length))
+      //     console.log(words.slice(currentWord + 1, words.length))
+      //   }
+      // }
+      // }
     }
   }
 
-  const onStartClick = () => {
-    const randomWords = axios.get('https://expensive-rose-barnacle.cyclic.app/').then(res => console.log(res))
+  const onStartClick = async () => {
+    // const randomWords = await axios.get('https://expensive-rose-barnacle.cyclic.app/').then(res => res.data.data)
+    // const data = await axios.get('http://localhost:8000/').then(res => res.data.data)
+    setCurrentWord(0)
     setWords(text.split(' '))
+    // setText(data.words.join(' '))
+    // setLineEnds(data.lineEnds)
   }
 
 
@@ -118,7 +125,7 @@ function App() {
         <button className="button" onClick={onStartClick}>Get new text</button>
       </div>
       <footer className="footer">
-        <span>version 0.2.1</span>
+        <span>version 0.2.2</span>
         <div>
           <span>By </span><a href="https://github.com/cgf29" target='blank'>Cgf</a>
         </div>
