@@ -10,10 +10,10 @@ a {
 .text {
     padding: 10px;
     color: white;
-    overflow: hidden;
+    overflow-y: hidden;
     display: block;
     max-width: 800px;
-    height: 400px;
+    height: 420px;
     font-size: 40px;
     background-color: blue;
     display: flex;
@@ -24,6 +24,8 @@ a {
 
 .word {
     height: 54px;
+    min-width: 40px;
+    /* max-width: 100px; */
 }
 
 .current-word {
