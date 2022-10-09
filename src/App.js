@@ -1,10 +1,11 @@
 import axios from 'axios'
 import classNames from 'classnames'
-import React, { useEffect, useState } from 'react'
+import React, { useEffect, useRef, useState } from 'react'
 import './style.css'
 
 function App() {
-  const [text, setText] = useState('the at there some my of be use her than and this an would first a have each make water to from which like been in or she him call is one do into who had how time oil that by their has its it word if look now he but will two find was not up more long for what other write down on all about go day are were out see did')
+  // const [text, setText] = useState('the at there some my of be use her than and this an would first a have each make water to from which like been in or she him call is one do into who had how time oil that by their has its it word if look now he but will two find was not up more long for what other write down on all about go day are were out see did')
+  const [text, setText] = useState([])
   const [inputValue, setInputValue] = useState('')
   const [words, setWords] = useState([])
   const [currentWord, setCurrentWord] = useState(0)
@@ -19,10 +20,12 @@ function App() {
   const [lineTracker, setLineTracker] = useState(0)
   const [lineEnds, setLineEnds] = useState([])
 
+  const inputRef = useRef(null)
 
-  // useEffect(() => {
-  //   setWords(text.split(' '))
-  // }, [text])
+
+  useEffect(() => {
+    console.log(text, words)
+  }, [text, words])
 
   useEffect(() => {
     const interval = setInterval(() => {
@@ -75,9 +78,15 @@ function App() {
         setIsCurrentWordCorrect(true)
         setCorrectWords(prev => [...prev, currentWord])
       }
-      if (inputValue.length < 2 || !isCurrentCorrect || inputValue.replace(' ', '') !== words[currentWord]) {
+      if (inputValue.length < 1 || !isCurrentCorrect || inputValue.replace(' ', '') !== words[currentWord]) {
         setIsCurrentWordCorrect(false)
         setWrongWords(prev => [...prev, currentWord])
+      }
+      if (currentWord > 0 && currentWord % 19 == 0) {
+        setWords(text[currentWord / 19])
+        setCorrectWords([])
+        setWrongWords([])
+        setCurrentWord(0)
       }
       // console.log(words.slice(lineTracker, currentWord).join(' ').length);
 
@@ -98,11 +107,16 @@ function App() {
 
   const onStartClick = async () => {
     // const randomWords = await axios.get('https://expensive-rose-barnacle.cyclic.app/').then(res => res.data.data)
-    // const data = await axios.get('http://localhost:8000/').then(res => res.data.data)
+    const randomWords = await axios.get('https://expensive-rose-barnacle.cyclic.app/').then(res => {
+      setText(res.data.data)
+      setWords(res.data.data[0])
+    })
+    // const randomWords = await axios.get('http://localhost:8000/').then(res => {
+    //   setText(res.data.data)
+    //   setWords(res.data.data[0])
+    // })
     setCurrentWord(0)
-    setWords(text.split(' '))
-    // setText(data.words.join(' '))
-    // setLineEnds(data.lineEnds)
+    inputRef.current.focus()
   }
 
 
@@ -119,13 +133,13 @@ function App() {
         )}>{word}&nbsp;</span>))}
       </div>
       <div className="bottom-part">
-        <input type="text" onChange={onInputChange} value={inputValue} onKeyPress={onSpacePress} />
+        <input ref={inputRef} type="text" onChange={onInputChange} value={inputValue} onKeyPress={onSpacePress} />
         <div className="timer">{timer === 60 ? '1:00' : timer > 9 ? `0:${timer}` : `0:0${timer}`}</div>
         <div className="result">Result: {isTimerStarted ? 0 : totalQuantityOfWords}</div>
         <button className="button" onClick={onStartClick}>Get new text</button>
       </div>
       <footer className="footer">
-        <span>version 0.2.2</span>
+        <span>version 0.3.0</span>
         <div>
           <span>By </span><a href="https://github.com/cgf29" target='blank'>Cgf</a>
         </div>
