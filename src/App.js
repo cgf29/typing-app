@@ -19,6 +19,7 @@ function App() {
   const [correctWords, setCorrectWords] = useState([])
   const [lineTracker, setLineTracker] = useState(0)
   const [lineEnds, setLineEnds] = useState([])
+  const [currentTextBlock, setCurrentTextBlock] = useState(0)
 
   const inputRef = useRef(null)
 
@@ -83,7 +84,8 @@ function App() {
         setWrongWords(prev => [...prev, currentWord])
       }
       if (currentWord > 0 && currentWord % 19 == 0) {
-        setWords(text[currentWord / 19])
+        setWords(text[currentTextBlock])
+        setCurrentTextBlock(currentTextBlock + 1)
         setCorrectWords([])
         setWrongWords([])
         setCurrentWord(0)
@@ -107,14 +109,15 @@ function App() {
 
   const onStartClick = async () => {
     // const randomWords = await axios.get('https://expensive-rose-barnacle.cyclic.app/').then(res => res.data.data)
-    const randomWords = await axios.get('https://expensive-rose-barnacle.cyclic.app/').then(res => {
-      setText(res.data.data)
-      setWords(res.data.data[0])
-    })
-    // const randomWords = await axios.get('http://localhost:8000/').then(res => {
+    // const randomWords = await axios.get('https://expensive-rose-barnacle.cyclic.app/').then(res => {
     //   setText(res.data.data)
     //   setWords(res.data.data[0])
     // })
+    const randomWords = await axios.get('http://localhost:8000/').then(res => {
+      setText(res.data.data)
+      setWords(res.data.data[0])
+    })
+    setCurrentTextBlock(1)
     setCurrentWord(0)
     inputRef.current.focus()
   }
@@ -139,7 +142,7 @@ function App() {
         <button className="button" onClick={onStartClick}>Get new text</button>
       </div>
       <footer className="footer">
-        <span>version 0.3.0</span>
+        <span>version 0.3.1</span>
         <div>
           <span>By </span><a href="https://github.com/cgf29" target='blank'>Cgf</a>
         </div>
