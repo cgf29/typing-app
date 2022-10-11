@@ -37,9 +37,12 @@ function App() {
     if (timer == 0) {
       setIsTimerStarted(false)
       seTtimer(60)
-      setCurrentWord(0)
-      setCorrectWords([])
-      setWrongWords([])
+      // setCurrentTextBlock(1)
+      //   setCorrectWords([])
+      //   setWrongWords([])
+      //   setCurrentWord(0)
+      setText()
+      setWords()
     }
 
     return () => clearInterval(interval)
@@ -142,7 +145,7 @@ function App() {
         <button className="button" onClick={onStartClick}>Get new text</button>
       </div>
       <footer className="footer">
-        <span>version 0.3.2</span>
+        <span>version 0.3.3</span>
         <div>
           <span>By </span><a href="https://github.com/cgf29" target='blank'>Cgf</a>
         </div>
