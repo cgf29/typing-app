@@ -109,14 +109,14 @@ function App() {
 
   const onStartClick = async () => {
     // const randomWords = await axios.get('https://expensive-rose-barnacle.cyclic.app/').then(res => res.data.data)
-    // const randomWords = await axios.get('https://expensive-rose-barnacle.cyclic.app/').then(res => {
-    //   setText(res.data.data)
-    //   setWords(res.data.data[0])
-    // })
-    const randomWords = await axios.get('http://localhost:8000/').then(res => {
+    await axios.get('https://expensive-rose-barnacle.cyclic.app/').then(res => {
       setText(res.data.data)
       setWords(res.data.data[0])
     })
+    // const randomWords = await axios.get('http://localhost:8000/').then(res => {
+    //   setText(res.data.data)
+    //   setWords(res.data.data[0])
+    // })
     setCurrentTextBlock(1)
     setCurrentWord(0)
     inputRef.current.focus()
@@ -142,7 +142,7 @@ function App() {
         <button className="button" onClick={onStartClick}>Get new text</button>
       </div>
       <footer className="footer">
-        <span>version 0.3.1</span>
+        <span>version 0.3.2</span>
         <div>
           <span>By </span><a href="https://github.com/cgf29" target='blank'>Cgf</a>
         </div>
