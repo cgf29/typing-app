@@ -3,6 +3,7 @@ import classNames from 'classnames'
 import React, { useEffect, useRef, useState } from 'react'
 import './style.css'
 
+
 function App() {
   // const [text, setText] = useState('the at there some my of be use her than and this an would first a have each make water to from which like been in or she him call is one do into who had how time oil that by their has its it word if look now he but will two find was not up more long for what other write down on all about go day are were out see did')
   const [text, setText] = useState([])
@@ -22,6 +23,7 @@ function App() {
   const [currentTextBlock, setCurrentTextBlock] = useState(0)
 
   const inputRef = useRef(null)
+  const buttonRef = useRef(null)
 
 
   useEffect(() => {
@@ -37,12 +39,11 @@ function App() {
     if (timer == 0) {
       setIsTimerStarted(false)
       seTtimer(60)
-      // setCurrentTextBlock(1)
-      //   setCorrectWords([])
-      //   setWrongWords([])
-      //   setCurrentWord(0)
+      setCorrectWords([])
+      setWrongWords([])
       setText()
       setWords()
+      inputRef.current.setAttribute("disabled", false)
     }
 
     return () => clearInterval(interval)
@@ -123,6 +124,7 @@ function App() {
     setCurrentTextBlock(1)
     setCurrentWord(0)
     inputRef.current.focus()
+    inputRef.current.setAttribute("disabled", true)
   }
 
 
@@ -145,7 +147,7 @@ function App() {
         <button className="button" onClick={onStartClick}>Get new text</button>
       </div>
       <footer className="footer">
-        <span>version 0.3.3</span>
+        <span>version 0.3.4</span>
         <div>
           <span>By </span><a href="https://github.com/cgf29" target='blank'>Cgf</a>
         </div>
