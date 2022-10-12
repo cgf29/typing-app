@@ -43,7 +43,7 @@ function App() {
       setWrongWords([])
       setText()
       setWords()
-      inputRef.current.setAttribute("disabled", false)
+      buttonRef.current.setAttribute("disabled", false)
     }
 
     return () => clearInterval(interval)
@@ -125,7 +125,7 @@ function App() {
       setCurrentTextBlock(1)
       setCurrentWord(0)
       inputRef.current.focus()
-      inputRef.current.setAttribute("disabled", true)
+      buttonRef.current.setAttribute("disabled", true)
     } catch (err) {
       console.log(err)
     }
