@@ -1,6 +1,8 @@
 import axios from 'axios'
 import classNames from 'classnames'
 import React, { useEffect, useRef, useState } from 'react'
+import Header from './Components/Header'
+import Text from './Components/Text'
 import './style.css'
 
 
@@ -12,7 +14,7 @@ function App() {
   const [currentWord, setCurrentWord] = useState(0)
   const [currentWordByLetters, setCurrentWordByLetters] = useState([])
   const [isCurrentCorrect, setIsCurrentCorrect] = useState(true)
-  const [timer, seTtimer] = useState(60)
+  const [timer, seTtimer] = useState(10)
   const [isTimerStarted, setIsTimerStarted] = useState(false)
   const [totalQuantityOfWords, setTotalQuantityOfWords] = useState(0)
   const [isCurrentWordCorrect, setIsCurrentWordCorrect] = useState(true)
@@ -21,14 +23,10 @@ function App() {
   const [lineTracker, setLineTracker] = useState(0)
   const [lineEnds, setLineEnds] = useState([])
   const [currentTextBlock, setCurrentTextBlock] = useState(0)
+  const [buttonDisabled, setButtonDisabled] = useState(false)
 
   const inputRef = useRef(null)
   const buttonRef = useRef(null)
-
-
-  useEffect(() => {
-    console.log(text, words)
-  }, [text, words])
 
   useEffect(() => {
     const interval = setInterval(() => {
@@ -38,12 +36,12 @@ function App() {
     }, 1000);
     if (timer == 0) {
       setIsTimerStarted(false)
-      seTtimer(60)
+      seTtimer(10)
       setCorrectWords([])
       setWrongWords([])
       setText()
       setWords()
-      buttonRef.current.setAttribute("disabled", false)
+      setButtonDisabled(false)
     }
 
     return () => clearInterval(interval)
@@ -60,12 +58,6 @@ function App() {
     setInputValue(e.target.value)
     const currentWordLetters = words[currentWord].split('')
     const currentWordInInput = e.target.value.replace(' ', '')
-    // const currentLetter = currentWordLetters[e.target.value.length - 1]
-    // setCurrentWordByLetters(prev => [...prev, currentLetter])
-    // console.log(currentWordByLetters, currentLetter)
-    // console.log(e.target.value, words[currentWord].substr(0, e.target.value.length))
-    // console.log(currentWordInInput)
-    console.log(currentWordInInput, words[currentWord])
     if (currentWordInInput === words[currentWord].substr(0, currentWordInInput.length)) {
       setIsCurrentCorrect(true)
     } else if (currentWordInInput !== words[currentWord].substr(0, currentWordInInput.length || currentWordInInput == ' ')) {
@@ -77,14 +69,13 @@ function App() {
     if (e.nativeEvent.code == 'Space') {
       setCurrentWord(currentWord + 1)
       setInputValue('')
-
-      if (isCurrentCorrect && inputValue.replace(' ', '') == words[currentWord]) {
+      if (inputValue.replace(' ', '') == words[currentWord]) {
         setTotalQuantityOfWords(totalQuantityOfWords + 1)
-        setIsCurrentWordCorrect(true)
+        // setIsCurrentWordCorrect(true)
         setCorrectWords(prev => [...prev, currentWord])
       }
-      if (inputValue.length < 1 || !isCurrentCorrect || inputValue.replace(' ', '') !== words[currentWord]) {
-        setIsCurrentWordCorrect(false)
+      if (!isCurrentCorrect || inputValue.replace(' ', '') !== words[currentWord]) {
+        // setIsCurrentWordCorrect(false)
         setWrongWords(prev => [...prev, currentWord])
       }
       if (currentWord > 0 && currentWord % 19 == 0) {
@@ -94,38 +85,25 @@ function App() {
         setWrongWords([])
         setCurrentWord(0)
       }
-      // console.log(words.slice(lineTracker, currentWord).join(' ').length);
-
-      // if (words.slice(lineTracker, currentWord).join(' ').length > 34 && words.slice(lineTracker, currentWord).join(' ').length < 48) {
-      //   setLineTracker(currentWord)
-      //   console.log(words.slice(lineTracker, currentWord).join(' ').length)
-      //   if (lineTracker > 30) {
-      //     setCorrectWords([])
-      //     setWrongWords([])
-      //     setCurrentWord(0)
-      //     setWords(words.slice(currentWord + 1, words.length))
-      //     console.log(words.slice(currentWord + 1, words.length))
-      //   }
-      // }
-      // }
     }
   }
 
   const onStartClick = async () => {
     try {
-      // const randomWords = await axios.get('https://expensive-rose-barnacle.cyclic.app/').then(res => res.data.data)
+      // await axios.get('https://expensive-rose-barnacle.cyclic.app/').then(res => res.data.data)
       await axios.get('https://expensive-rose-barnacle.cyclic.app/').then(res => {
         setText(res.data.data)
         setWords(res.data.data[0])
       })
-      // const randomWords = await axios.get('http://localhost:8000/').then(res => {
+      // await axios.get('http://localhost:8000/').then(res => {
       //   setText(res.data.data)
       //   setWords(res.data.data[0])
       // })
       setCurrentTextBlock(1)
       setCurrentWord(0)
+      setTotalQuantityOfWords(0)
       inputRef.current.focus()
-      buttonRef.current.setAttribute("disabled", true)
+      setButtonDisabled(true)
     } catch (err) {
       console.log(err)
     }
@@ -134,6 +112,8 @@ function App() {
 
   return (
     <div className="App">
+      <Header />
+      {/* <Text /> */}
       <div className='text'>
         {words && words.map((word, i) => (<span key={i} className={classNames(
           { word },
@@ -144,11 +124,12 @@ function App() {
           { 'wrong-word': wrongWords.includes(i) }
         )}>{word}&nbsp;</span>))}
       </div>
+
       <div className="bottom-part">
         <input ref={inputRef} type="text" onChange={onInputChange} value={inputValue} onKeyPress={onSpacePress} />
         <div className="timer">{timer === 60 ? '1:00' : timer > 9 ? `0:${timer}` : `0:0${timer}`}</div>
         <div className="result">Result: {isTimerStarted ? 0 : totalQuantityOfWords}</div>
-        <button className="button" onClick={onStartClick}>Get new text</button>
+        <button disabled={buttonDisabled} className="button" onClick={onStartClick}>Get new text</button>
       </div>
       <footer className="footer">
         <span>version 0.3.5</span>
